@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/demo.dir/main.cc.o CMakeFiles/demo.dir/pid.cc.o -o ../bin/demo  /usr/lib/x86_64-linux-gnu/libpython3.10.so 

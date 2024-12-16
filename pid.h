@@ -55,10 +55,13 @@ private:
     vector<double> lat_err_vec_;
 
 public:
+    PID(){};
+    ~PID(){};
+    bool Execute(void);
+
     double GetCrvVature(const PID::Ref &p1, const PID::Ref &p2, const PID::Ref &p3);
     vector<PID::Ref> GetRefCurve(const RefType &ref_type);
     void Init(const vector<PID::Ref> &ref_curve, VehState &cur_state);
-    bool Execute(void);
     uint32_t GetMinDispIdx(const vector<PID::Ref> &ref_curve, const PID::VehState &cur_state);
     bool GetFrontWheelDelta(const vector<PID::Ref> &ref_curve, 
                         uint32_t &idx, 

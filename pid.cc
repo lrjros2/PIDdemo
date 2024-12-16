@@ -34,7 +34,7 @@ bool PID::Execute(void){
         double delta = 0.0;
         bool flag = GetFrontWheelDelta(ref_curve, min_disp_idx, cur_state, delta);
         if(!flag){
-            cout << "Error out of range.QUIT." << endl;
+            cout << "Error out of range. QUIT." << endl;
             break;
         }
 
@@ -43,8 +43,9 @@ bool PID::Execute(void){
 
         // Update state
         UpdateState(delta, lon_acc, cur_state);
+        history_state.push_back(cur_state);
 
-        Plot();
+        Plot(ref_curve, history_state, to_goal_flag);
     }
 }
 
@@ -227,7 +228,47 @@ void PID::Plot(const vector<Ref> &ref_curve,
             const bool &to_goal_flag){
 
     clf();
-    plot(ref_curve.);
-    matplotlibcpp::title("PID");
+    xlabel("X");
+    ylabel("Y");
 
+    // Plot ref
+    vector<double> x_list;
+    vector<double> y_list;
+    for(int i = 0; i < ref_curve.size(); ++i){
+        x_list.push_back(ref_curve.at(i).x_ref);
+        y_list.push_back(ref_curve.at(i).y_ref);
+    }
+    plot(x_list, y_list, "b");
+    
+
+    x_list.clear();
+    y_list.clear();
+    // Plot trajectory
+    for(int i = 0; i < history_state.size(); ++i){
+        x_list.push_back(history_state.at(i).x);
+        y_list.push_back(history_state.at(i).y);
+    }
+    plot(x_list, y_list, "r");
+
+    show();
+    clf();
+
+    // Plot error
+    if(to_goal_flag){
+        x_list.clear();
+        y_list.clear();
+        for(int i = 0; i < lat_err_vec_.size(); ++i){
+            x_list.push_back(i);
+        }
+        y_list = lat_err_vec_;
+        plot(x_list, y_list, "g");
+    }
+
+    if(to_goal_flag == false){
+        show(false);
+        pause(0.02);
+    }else{
+        show(true);
+    }
+    
 }
